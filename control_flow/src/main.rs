@@ -22,5 +22,14 @@ fn main() {
         }
     };
 
-    println!("{}", res)
+    println!("{}", res);
+
+    // while loop
+    let mut dig = 3;
+    while dig > 0 {
+        dig -= 1;
+        println!("the dig is {}", dig);
+    }
+
+    println!("done")
 }
