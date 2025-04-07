@@ -117,6 +117,7 @@
 // // in this &s is a dangling reference (hence an error) because after the function ends
 // // s is defined within the scope of gg() so when gg() ends s will be dropped, it will be deallocated from the heap
 // // meaning the returned reference will be pointing to an invalid memory since the memory no longer exists from the heap
+// // the alternative option is returning the string instead of the reference to the string
 // fn gg() -> &String {
 //     let s = String::from("hey");
 //     &s
