@@ -79,16 +79,49 @@
 //     a_string // a_string is returned and moves out to the calling function
 // }
 
+// Borrowing - passing in references as function parameters. borrowing the value instead of actually taking ownership
+// fn main() {
+//     let s1 = String::from("hey");
+//     let len = get_len(&s1);
+//     println!("{len}")
+// }
+
+// fn get_len(s: &String) -> usize {
+//     s.len()
+// }
+
+// // to be able to mutate without taking ownership, we do:
+// fn main() {
+//     let mut s1 = String::from("hey"); // make s1 a mutable var
+//     change(&mut s1);
+//     println!("{s1}");
+
+//     let s2 = &mut s1;
+//     println!("{}", *s2);
+// }
+
+// fn change(s: &mut String) {
+//     // // to change, you can clear then push a new str
+//     // s.clear();
+//     // s.push_str("hi");
+
+//     // OR dereference the value of the reference and assign a new value
+//     *s = String::from("there")
+// }
+
+// // Dangling references - references that point to invalid data
+// fn main() {
+//     let cc = gg();
+// }
+
+// // in this &s is a dangling reference (hence an error) because after the function ends
+// // s is defined within the scope of gg() so when gg() ends s will be dropped, it will be deallocated from the heap
+// // meaning the returned reference will be pointing to an invalid memory since the memory no longer exists from the heap
+// fn gg() -> &String {
+//     let s = String::from("hey");
+//     &s
+// }
+
 fn main() {
-    let s1 = String::from("hello");
-
-    let (s2, len) = calculate_length(s1);
-
-    println!("The length of '{s2}' is {len}.");
-}
-
-fn calculate_length(s: String) -> (String, usize) {
-    let length = s.len(); // len() returns the length of a String
-
-    (s, length)
+    println!("we will continue from here")
 }
