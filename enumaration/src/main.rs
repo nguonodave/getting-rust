@@ -34,7 +34,16 @@ struct Character {
 enum CharacterClass {
     Warrior { sword_type: String, clan: String },
     Army { kills: u32 },
-    Pilot (u8),
+    Pilot(u8),
+}
+
+// impl for enum
+impl CharacterClass {
+    fn call(&self) {
+        if let CharacterClass::Warrior{clan, sword_type} = &self {
+            println!("the weapon is {} and the clan is {}", sword_type, clan)
+        }
+    }
 }
 
 fn main() {
@@ -47,32 +56,48 @@ fn main() {
         },
     };
 
-    println!("{:#?}", character1);
+    println!("{}, {}", character1.name, character1.health);
 
     // we can print one data as follows
     // .. ignores the rest fields in pattern matching
-    println!("{}", match &character1.class {
-        CharacterClass::Warrior { sword_type, .. } => sword_type,
-        _ => "",
-    });
+    println!(
+        "{}",
+        match &character1.class {
+            CharacterClass::Warrior { sword_type, .. } => sword_type,
+            _ => "",
+        }
+    );
 
     let empty_string = "".to_string();
 
     // we can print both data as follows
     // .. ignores the rest fields in pattern matching
-    println!("{:?}", match &character1.class {
-        CharacterClass::Warrior { sword_type, clan } => (sword_type, clan),
-        _ => (&empty_string, &empty_string),
-    });
+    // the format! macro creates and returns a formatted String based on the provided format
+    println!(
+        "{}",
+        match &character1.class {
+            CharacterClass::Warrior { sword_type, clan } => format!("{}, {}", sword_type, clan),
+            _ => format!("{}, {}", &empty_string, &empty_string), // you can't call "".to_string() directly at this part since it is a
+                                                 // temporary value and it will be dropped at the end of the match scope,
+                                                 // hence the borrow (&) will be invalid (i.e., from a non-existing memory address)
+        }
+    );
 
     // or as follows
-    if let CharacterClass::Warrior{sword_type, clan} = &character1.class {
+    if let CharacterClass::Warrior { sword_type, clan } = &character1.class {
         println!("{sword_type}, {clan}")
     };
 
     let character2 = Character {
         name: "Price".to_string(),
         health: 20,
-        class: CharacterClass::Pilot(33)
+        class: CharacterClass::Pilot(33),
     };
+
+    println!("{}", match character2.class {
+        CharacterClass::Pilot(xp) => xp,
+        _ => 0
+    });
+
+    character1.class.call();
 }
