@@ -46,6 +46,10 @@ impl CharacterClass {
     }
 }
 
+fn make_army(kills: u32) -> CharacterClass {
+    CharacterClass::Army { kills }
+}
+
 fn main() {
     let character1 = Character {
         name: "Roach".to_string(),
@@ -60,6 +64,8 @@ fn main() {
 
     // we can print one data as follows
     // .. ignores the rest fields in pattern matching
+    // we are also borrowing instead of calling character1.class directly
+    // cause sword_type and clan are not Copy
     println!(
         "{}",
         match &character1.class {
@@ -100,4 +106,36 @@ fn main() {
     });
 
     character1.class.call();
+
+    let army1_class = make_army(21);
+
+    let army1 = Character {
+        name: "Rock".to_string(),
+        health: 100,
+        class: army1_class
+    };
+
+    // in the following, we are able to call army1.class without borrowing
+    // cause the whole army variant data is Copy
+    println!("{}", match army1.class {
+        CharacterClass::Army { kills } => kills,
+        _ => 0
+    });
+
+    println!("{}", match army1.class {
+        CharacterClass::Army { kills } => kills,
+        _ => 0
+    });
+
+    // // assuming that the army variant would be... Army { kills: u32, rank: String },
+    // // then the following second println will give an error of moved value
+    // println!("{}", match army1.class {
+    //     CharacterClass::Army { kills, rank } => format!("{}, {}", kills, rank),
+    //     _ => format!("{}", 0)
+    // });
+
+    // println!("{}", match army1.class {
+    //     CharacterClass::Army { kills, rank } => format!("{}, {}", kills, rank),
+    //     _ => format!("{}", 0)
+    // });
 }
